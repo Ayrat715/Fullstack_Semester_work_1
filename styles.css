@@ -1,0 +1,374 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body {
+    font-family: "VK Sans Display";
+    background-color: #f5f5f5;
+}
+header {
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 1rem;
+    font-size: 1.25rem;
+}
+.main-layout {
+    display: flex;
+    height: calc(100vh - 60px);
+}
+
+/* Левая панель */
+.sidebar {
+    width: 25%;
+    background-color: #eee;
+    padding: 1rem;
+    overflow-y: auto;
+}
+#newEventBtn {
+    width: 100%;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    font-size: 1rem;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+#newEventBtn:hover {
+    background-color: #0056b3;
+}
+
+/* Правая часть (поле для поиска + недельный календарь) */
+.content {
+    width: 75%;
+    background-color: #fff;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+/* Верхняя панель: кнопки перехода по неделям + текущая неделя + поиск */
+.top-bar {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+#prevWeekBtn,
+#nextWeekBtn {
+    background-color: #eee;
+    border: 1px solid #ccc;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+}
+#prevWeekBtn:hover,
+#nextWeekBtn:hover {
+    background-color: #ddd;
+}
+#weekRangeLabel {
+    font-weight: bold;
+    font-size: 1rem;
+    min-width: 220px;
+    text-align: center;
+}
+#searchInput {
+    flex-grow: 1;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1rem;
+}
+
+.modal-search-overlay {
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: none;
+    z-index: 999;
+}
+.modal-search {
+    background-color: #fff;
+    width: 400px;
+    margin: 100px auto;
+    padding: 1rem;
+    border-radius: 8px;
+    display: none;
+}
+.modal-search.show {
+    display: block !important;
+}
+.modal-search-overlay.show {
+    display: block !important;
+}
+.search-item {
+    margin-bottom: 0.5rem;
+    cursor: pointer;
+}
+.search-item:hover {
+    background-color: #f0f0f0;
+}
+.search-item strong {
+    display: inline-block;
+    margin-right: 0.5rem;
+}
+
+/* Календарь месяца */
+.mini-calendar {
+    margin-top: 1rem;
+}
+.calendar-nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+.calendar-nav button {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    border-radius: 6px;
+}
+.calendar-nav button:hover {
+    background-color: #ddd;
+}
+#currentMonth {
+    margin: 0 0.5rem;
+    font-weight: bold;
+    font-size: 1rem;
+}
+.mini-calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    grid-template-rows: 30px repeat(6, 30px);
+    gap: 5px;
+}
+/* Шапка дней недели для календаря месяца */
+.day-header-cell {
+    background-color: #ddd;
+    text-align: center;
+    font-weight: bold;
+    border-radius: 6px;
+    line-height: 30px;
+}
+/* Ячейки дат */
+.calendar-cell {
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    font-size: 0.9rem;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    color: #000;
+}
+.calendar-cell:hover {
+    background-color: #f0f0f0;
+}
+.other-month {
+    color: #aaa;
+}
+.today-day {
+    border-bottom: 2px solid #007bff;
+}
+.selected-day {
+    background-color: #007bff;
+    color: #fff;
+}
+.today-day.selected-day {
+    border-bottom: none;
+}
+
+/* Календарь недели */
+.week-calendar {
+    flex-grow: 1;
+    display: grid;
+    grid-template-columns: 50px repeat(7, 1fr);
+    grid-template-rows: auto; /* Содержимое доклеиваем вручную */
+    background-color: #fafafa;
+    border-radius: 8px;
+    padding: 0.5rem;
+    overflow: auto; /* Для скролла, т.к. высота может быть большой */
+    position: relative;
+}
+.corner-cell {
+    background-color: #f3f3f3;
+    border-radius: 6px;
+    margin: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+.week-day-title {
+    background-color: #f3f3f3;
+    border-radius: 6px;
+    margin: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+/* Столбец часов */
+.hour-column {
+    position: relative;
+    margin: 2px;
+    background-color: #f3f3f3;
+    border-radius: 6px;
+    height: 1440px; /* 24 часа * 60 пикс = 1440 */
+    overflow: hidden;
+}
+.hour-line {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background-color: #ccc;
+}
+.hour-label-text {
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 60px;
+}
+
+/* Столбец дня (для добавления событий) */
+.day-column {
+    position: relative;
+    margin: 2px;
+    background-color: #fff;
+    border-radius: 6px;
+    height: 1440px;
+    overflow: hidden;
+    cursor: pointer;
+}
+.day-column:hover {
+    background-color: #fefefe;
+}
+.day-column .day-line {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background-color: #eee;
+}
+
+/* Событие */
+.event-block {
+    position: absolute;
+    left: 2px;
+    right: 2px;
+    background-color: rgba(0, 123, 255, 0.2);
+    border-left: 4px solid #007bff;
+    border-radius: 4px;
+    padding: 2px;
+    font-size: 0.8rem;
+    overflow: hidden;
+    cursor: pointer;
+}
+/* Выделение выходных в недельном календаре */
+.weekend-column {
+    background-color: rgba(0, 123, 255, 0.1);
+}
+
+/* Модалка для создания/деталей события */
+.modal-overlay {
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: none;
+    z-index: 999;
+}
+.modal {
+    background-color: #fff;
+    width: 400px;
+    margin: 100px auto;
+    padding: 1rem;
+    border-radius: 8px;
+    display: none;
+    /* Для переноса очень длинных ссылок/слов, на созвон напр. */
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+.show {
+    display: block !important;
+}
+.modal h2 {
+    margin-bottom: 1rem;
+}
+.modal form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+.modal label {
+    font-weight: bold;
+}
+.modal input[type="text"],
+.modal input[type="date"],
+.modal input[type="time"],
+.modal input[type="url"],
+.modal textarea {
+    padding: 0.5rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: pre-wrap;
+}
+.modal-buttons {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-end;
+    margin-top: 1rem;
+}
+.btn-primary {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+}
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+.btn-secondary {
+    background-color: #ccc;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+}
+.btn-secondary:hover {
+    background-color: #bbb;
+}
+.btn-danger {
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+}
+.btn-danger:hover {
+    background-color: #c82333;
+}
+
+/* Детализация окна с деталями события */
+#detailsContent .field-row {
+    margin-bottom: 0.5rem;
+}
+#detailsContent .field-label {
+    font-weight: bold;
+}
+

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Календарь</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>Календарь</h1>
+  </header>
+
+  <section class="main-layout">
+    <!-- Левая панель -->
+    <aside class="sidebar">
+      <button id="newEventBtn">Новое событие</button>
+
+      <!-- Календарь месяца -->
+      <div class="mini-calendar">
+        <div class="calendar-nav">
+          <button id="prevMonthBtn">&larr;</button>
+          <span id="currentMonth"></span>
+          <button id="nextMonthBtn">&rarr;</button>
+        </div>
+        <div id="miniCalendarGrid" class="mini-calendar-grid"></div>
+      </div>
+    </aside>
+
+    <!-- Правая панель: неделя + поиск -->
+    <div class="content">
+      <div class="top-bar">
+        <button id="prevWeekBtn">&larr;</button>
+        <span id="weekRangeLabel"></span>
+        <button id="nextWeekBtn">&rarr;</button>
+        <input
+                type="text"
+                id="searchInput"
+                placeholder="Поиск по событиям"
+        />
+      </div>
+
+      <!-- Недельный календарь -->
+      <div id="weekCalendar" class="week-calendar"></div>
+    </div>
+  </section>
+
+  <!-- Модалка для результатов поиска -->
+  <div id="searchOverlay" class="modal-search-overlay">
+    <div id="searchModal" class="modal-search">
+      <h2>Результаты поиска</h2>
+      <div id="searchResultsContainer"></div>
+      <div style="text-align: right; margin-top: 1rem;">
+        <button id="closeSearchBtn" class="btn-secondary">Закрыть</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Модалка создания/редактирования -->
+  <div id="modalOverlayCreate" class="modal-overlay">
+    <div id="modalCreate" class="modal">
+      <h2 id="modalCreateTitle">Создать событие</h2>
+      <form id="eventForm">
+        <label>Название события:</label>
+        <input type="text" id="eventTitle" required />
+
+        <label>Дата:</label>
+        <input type="date" id="eventDate" required />
+
+        <label>Время начала:</label>
+        <input type="time" id="eventTimeStart" required />
+
+        <label>Время окончания:</label>
+        <input type="time" id="eventTimeEnd" required />
+
+        <label>Участники:</label>
+        <input type="text" id="eventParticipants" />
+
+        <label>Место:</label>
+        <input type="text" id="eventLocation" />
+
+        <label>Ссылка:</label>
+        <input type="url" id="eventLink" />
+
+        <label>Описание:</label>
+        <textarea id="eventDescription"></textarea>
+
+        <div class="modal-buttons">
+          <button type="submit" class="btn-primary">Сохранить</button>
+          <button type="button" id="cancelBtn" class="btn-secondary">Отмена</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Модалка деталей события" -->
+  <div id="modalOverlayDetails" class="modal-overlay">
+    <div id="modalDetails" class="modal">
+      <h2>Детали события</h2>
+      <div id="detailsContent"></div>
+      <div class="modal-buttons">
+        <button id="editBtn" class="btn-primary">Изменить</button>
+        <button id="deleteBtn" class="btn-danger">Удалить</button>
+        <button id="closeDetailsBtn" class="btn-secondary">Закрыть</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="scripts.js"></script>
+</body>
+</html>
