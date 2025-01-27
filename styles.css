@@ -324,6 +324,7 @@ header {
     word-wrap: break-word;
     overflow-wrap: break-word;
     white-space: pre-wrap;
+    resize: none;
 }
 .modal-buttons {
     display: flex;
